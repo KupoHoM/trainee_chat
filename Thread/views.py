@@ -10,10 +10,12 @@ from django.views.decorators.csrf import csrf_exempt
 from django.http import JsonResponse
 from django.views.decorators.http import require_POST
 from django.db.models import Max
+from rest_framework import status
+from simple_chat.settings import THREAD_SETTINGS
 
 
 # Create your views here.
-class ThreadPnation(LimitOffsetPagination):
+class ThreadPagination(LimitOffsetPagination):
     page_size = 10
     page_size_query_param = 'page_size'
     max_page_size = 5
@@ -21,7 +23,7 @@ class ThreadPnation(LimitOffsetPagination):
 
 class ThreadViewSet(ModelViewSet):
     queryset = ThreadModel.objects.filter()
-    pagination_class = ThreadPnation
+    pagination_class = ThreadPagination
     serializer_class = ThreadSerializer
     filter_backends = [DjangoFilterBackend]
     filterset_fields = ['id']
@@ -29,21 +31,23 @@ class ThreadViewSet(ModelViewSet):
 
 @csrf_exempt
 @require_POST
-def create_thread(request):
+def create_thread(self, request):
     participants = request.POST.get('participants')
-
     if participants is None:
         return JsonResponse({'error': 'No participants provided'})
 
     participants = participants.split(',')
-
     thread = ThreadModel.objects.filter(participants__id__in=participants).distinct()
-
     if thread.exists():
         return JsonResponse({'thread_id': thread.first().id})
-
     thread = ThreadModel.objects.create()
     thread.participants.set(participants)
+
+    data = set(self.request.data.get("participants", None))
+    if len(data) != THREAD_SETTINGS.get("participants_count", 2):
+        return Response(
+            {"detail": "Can't make a thread. duplicate participants or an incorrect participant count"},
+            status.HTTP_400_BAD_REQUEST)
 
     return JsonResponse({'thread_id': thread.id})
 
@@ -75,4 +79,3 @@ class ThreadListAPIView(APIView):
             }
             threads_data.append(thread_data)
         return Response(threads_data)
-
