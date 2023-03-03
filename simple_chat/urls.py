@@ -19,9 +19,12 @@ from rest_framework import routers
 from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView, TokenVerifyView
 
 from Message.views import MessageViewSet, unread_messages_count, MarkMessageAsRead, MarkMessagesAsRead
+from Thread.views import create_thread, ThreadViewSet, ThreadListAPIView
+
 
 router = routers.DefaultRouter()
 router.register(r'message', MessageViewSet, basename='message')
+router.register(r'thread', ThreadViewSet, basename='thread')
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -31,6 +34,8 @@ urlpatterns = [
     path('api/messages/<int:message_id>/read/', MarkMessageAsRead.as_view()),
     path('api/messages/read/', MarkMessagesAsRead.as_view()),
 
+    path('create_thread/', create_thread, name='create_thread'),
+    path('threads/', ThreadListAPIView.as_view(), name='thread-list-api'),
 
 
 

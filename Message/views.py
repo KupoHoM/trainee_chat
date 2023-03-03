@@ -1,6 +1,5 @@
 from rest_framework.views import APIView
 from rest_framework.decorators import api_view
-from rest_framework.permissions import IsAuthenticated
 from rest_framework.viewsets import ModelViewSet
 from rest_framework.pagination import LimitOffsetPagination
 from django_filters.rest_framework import DjangoFilterBackend
@@ -22,7 +21,6 @@ class MessageViewSet(ModelViewSet):
     queryset = MessageModel.objects.filter()
     pagination_class = MessagePnation
     serializer_class = MessageSerializer
-    permission_classes = IsAuthenticated
     filter_backends = [DjangoFilterBackend]
     filterset_fields = ['is_read', 'sender', 'thread']
 
