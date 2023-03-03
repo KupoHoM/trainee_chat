@@ -18,16 +18,25 @@ from django.urls import path, include, re_path
 from rest_framework import routers
 from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView, TokenVerifyView
 
-from Message.views import MessageViewSet
+from Message.views import MessageViewSet, unread_messages_count, MarkMessageAsRead, MarkMessagesAsRead
 
 router = routers.DefaultRouter()
 router.register(r'message', MessageViewSet, basename='message')
-
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/', include(router.urls)),
 
+    path('api/message/<int:user_id>/unread_messages_count/', unread_messages_count, name='unread_messages_count'),
+    path('api/messages/<int:message_id>/read/', MarkMessageAsRead.as_view()),
+    path('api/messages/read/', MarkMessagesAsRead.as_view()),
+
+
+
+
+    path('api/v1/auth/', include('djoser.urls')),
+    path('api/v1/drf-auth/', include('rest_framework.urls')),
+    re_path(r'^auth/', include('djoser.urls.authtoken')),
 
     path('api/v1/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
     path('api/v1/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),

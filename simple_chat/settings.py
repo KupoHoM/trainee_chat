@@ -38,6 +38,8 @@ INSTALLED_APPS = [
     'Thread',
     'Message',
     'rest_framework',
+    'rest_framework.authtoken',
+    'djoser',
     'django_filters',
 
 ]
@@ -134,7 +136,7 @@ REST_FRAMEWORK = {
     ],
 
     'DEFAULT_PERMISSION_CLASSES': [
-        'rest_framework.permissions.DjangoModelPermissions'
+        'rest_framework.permissions.IsAuthenticated'
     ],
 
     'DEFAULT_AUTHENTICATION_CLASSES': [
