@@ -16,10 +16,7 @@ The "Simple Chat" project is an API developed using Python/Django/DRF, with endp
 
 Before you start, make sure you have [Python](https://www.python.org/downloads/release/python-3110/) v3.11+ and pip installed. 
 
-Clone a repository from GitHub
-```
-git clone https://github.com/KupoHoM/trainee_chat.git
-```
+
 Create a virtual environment
 ```
 python -m venv venv
@@ -31,6 +28,10 @@ Windows:
     .\venv\Scripts\activate
 Unix or Linux:
     source venv/bin/activate
+```
+Clone a repository from GitHub
+```
+git clone https://github.com/KupoHoM/trainee_chat.git
 ```
 Install the dependencies
 
@@ -60,8 +61,4 @@ Project files are located in project folders.
 - The models.py file contains the database models.
 - The admin.py allows you to register models that will be available in the admin interface. 
 - The serializers.py contains code for serializing and deserializing complex data types, such as models.
-
 - The simple_chat folder with basic project settings
-
-
-
